@@ -1,0 +1,25 @@
+async void Button1_Clicked(System.Object sender, System.EventArgs e)
+{
+    var pickResult = await FilePicker.PickMultipleAsync(new PickOptions
+    {
+        FileTypes = FilePickerFileType.Images,
+        PickerTitle = "Pick image(s)"
+    });
+
+    if (pickResult != null)
+    {
+        var imageList = new List<ImageSource>();
+
+        foreach(var image in pickResult)
+        {
+            var stream = await image.OpenReadAsync();
+            var fileName = image.FileName;
+            
+            /////////////////////// Here I am trying to pass the name of each image and the path of each image
+            imageList.Add(ImageSource.FromStream(() => stream));
+            ///////////////////////////////////////////////////////////////////////////////////////////////////
+        }
+
+        collectionView.ItemsSource = imageList;
+    }
+}
